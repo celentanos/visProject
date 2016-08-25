@@ -72,23 +72,22 @@ public:
         for (size_t i = 0; i < ny; ++i)
             y[i] = grid->points()[i * nx][1];
 
-        const size_t levels = 14;
-        double z[levels] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
+        const size_t levels = 2;
+        double z[levels] = {5, 10};
+        debugLog() << "structs-init: fertig" << endl;
 
         /// Lines ##############################################################
         vector<Vector3> v;
-//        v[0] = Point3(45, 6, 0);
-//        v[1] = Point3(55, 16, 0);
 
         conrec(d, 0, ny - 1, 0, nx - 1, y, x, levels, z, v);
         debugLog() << "conrec: fertig" << endl;
 
         isolines->add(Primitive::LINES).setColor(Color(1, 0, 0)).setVertices(v);
         // Aufräumen -----------------------------------------------------------
-//        for (size_t i = 0; i < ny; ++i)
-//            delete d[i];
-//        delete x;
-//        delete y;
+        for (size_t i = 0; i < ny; ++i)
+            delete d[i];
+        delete x;
+        delete y;
     }
 };
 

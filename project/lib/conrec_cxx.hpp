@@ -95,7 +95,7 @@ int conrec(double **d,
            std::vector<fantom::Point3> &v)
 {
     int m1, m2, m3, case_value;
-    double dmin, dmax, y1 = 0.0, y2 = 0.0, x1 = 0.0, x2 = 0.0;
+    double dmin, dmax, x1 = 0.0, x2 = 0.0, y1 = 0.0, y2 = 0.0;
     int i, j, k, m;
     double h[5];
     int sh[5];
@@ -197,82 +197,82 @@ int conrec(double **d,
                                     //     Case 1 - Line between vertices 1 and 2
                                     //===========================================================
                                 case 1:
-                                    y1 = yh[m1];
-                                    x1 = xh[m1];
-                                    y2 = yh[m2];
-                                    x2 = xh[m2];
+                                    x1 = yh[m1];
+                                    y1 = xh[m1];
+                                    x2 = yh[m2];
+                                    y2 = xh[m2];
                                     break;
                                     //===========================================================
                                     //     Case 2 - Line between vertices 2 and 3
                                     //===========================================================
                                 case 2:
-                                    y1 = yh[m2];
-                                    x1 = xh[m2];
-                                    y2 = yh[m3];
-                                    x2 = xh[m3];
+                                    x1 = yh[m2];
+                                    y1 = xh[m2];
+                                    x2 = yh[m3];
+                                    y2 = xh[m3];
                                     break;
                                     //===========================================================
                                     //     Case 3 - Line between vertices 3 and 1
                                     //===========================================================
                                 case 3:
-                                    y1 = yh[m3];
-                                    x1 = xh[m3];
-                                    y2 = yh[m1];
-                                    x2 = xh[m1];
+                                    x1 = yh[m3];
+                                    y1 = xh[m3];
+                                    x2 = yh[m1];
+                                    y2 = xh[m1];
                                     break;
                                     //===========================================================
                                     //     Case 4 - Line between vertex 1 and side 2-3
                                     //===========================================================
                                 case 4:
-                                    y1 = yh[m1];
-                                    x1 = xh[m1];
-                                    y2 = xsect(m2, m3);
-                                    x2 = ysect(m2, m3);
+                                    x1 = yh[m1];
+                                    y1 = xh[m1];
+                                    x2 = xsect(m2, m3);
+                                    y2 = ysect(m2, m3);
                                     break;
                                     //===========================================================
                                     //     Case 5 - Line between vertex 2 and side 3-1
                                     //===========================================================
                                 case 5:
-                                    y1 = yh[m2];
-                                    x1 = xh[m2];
-                                    y2 = xsect(m3, m1);
-                                    x2 = ysect(m3, m1);
+                                    x1 = yh[m2];
+                                    y1 = xh[m2];
+                                    x2 = xsect(m3, m1);
+                                    y2 = ysect(m3, m1);
                                     break;
                                     //===========================================================
                                     //     Case 6 - Line between vertex 3 and side 1-2
                                     //===========================================================
                                 case 6:
-                                    y1 = yh[m3];
-                                    x1 = xh[m3];
-                                    y2 = xsect(m1, m2);
-                                    x2 = ysect(m1, m2);
+                                    x1 = yh[m3];
+                                    y1 = xh[m3];
+                                    x2 = xsect(m1, m2);
+                                    y2 = ysect(m1, m2);
                                     break;
                                     //===========================================================
                                     //     Case 7 - Line between sides 1-2 and 2-3
                                     //===========================================================
                                 case 7:
-                                    y1 = xsect(m1, m2);
-                                    x1 = ysect(m1, m2);
-                                    y2 = xsect(m2, m3);
-                                    x2 = ysect(m2, m3);
+                                    x1 = xsect(m1, m2);
+                                    y1 = ysect(m1, m2);
+                                    x2 = xsect(m2, m3);
+                                    y2 = ysect(m2, m3);
                                     break;
                                     //===========================================================
                                     //     Case 8 - Line between sides 2-3 and 3-1
                                     //===========================================================
                                 case 8:
-                                    y1 = xsect(m2, m3);
-                                    x1 = ysect(m2, m3);
-                                    y2 = xsect(m3, m1);
-                                    x2 = ysect(m3, m1);
+                                    x1 = xsect(m2, m3);
+                                    y1 = ysect(m2, m3);
+                                    x2 = xsect(m3, m1);
+                                    y2 = ysect(m3, m1);
                                     break;
                                     //===========================================================
                                     //     Case 9 - Line between sides 3-1 and 1-2
                                     //===========================================================
                                 case 9:
-                                    y1 = xsect(m3, m1);
-                                    x1 = ysect(m3, m1);
-                                    y2 = xsect(m1, m2);
-                                    x2 = ysect(m1, m2);
+                                    x1 = xsect(m3, m1);
+                                    y1 = ysect(m3, m1);
+                                    x2 = xsect(m1, m2);
+                                    y2 = ysect(m1, m2);
                                     break;
                                 default:
                                     printf("conrec(): default...");
@@ -282,8 +282,8 @@ int conrec(double **d,
                                 // Put your processing code here and comment out the printf
                                 //=============================================================
 //                                printf("%f %f %f %f %f\n", x1, y1, x2, y2, z[k]);
-                                v.push_back(fantom::Point3(y1, x1, 0));
-                                v.push_back(fantom::Point3(y2, x2, 0));
+                                v.push_back(fantom::Point3(x1, y1, 0));
+                                v.push_back(fantom::Point3(x2, y2, 0));
                             }
                         }
                     }
