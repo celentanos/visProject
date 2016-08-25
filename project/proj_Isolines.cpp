@@ -85,9 +85,9 @@ public:
         isolines->add(Primitive::LINES).setColor(Color(1, 0, 0)).setVertices(v);
         // Aufräumen -----------------------------------------------------------
         for (size_t i = 0; i < ny; ++i)
-            delete d[i];
-        delete x;
-        delete y;
+            delete[] d[i];
+        delete[] x;
+        delete[] y;
     }
 };
 
