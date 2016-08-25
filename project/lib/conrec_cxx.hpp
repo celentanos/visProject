@@ -4,16 +4,6 @@
 #include <vector>
 #include <fantom/math.hpp>
 
-//int conrec(double **d,
-//           int ilb,
-//           int iub,
-//           int jlb,
-//           int jub,
-//           double *x,
-//           double *y,
-//           int nc,
-//           double *z);
-
 #define xsect(p1,p2) (h[p2]*xh[p1]-h[p1]*xh[p2])/(h[p2]-h[p1])
 #define ysect(p1,p2) (h[p2]*yh[p1]-h[p1]*yh[p2])/(h[p2]-h[p1])
 #define min(x,y) (x<y?x:y)
@@ -69,9 +59,9 @@ MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  *
  * \param d     matrix of data to contour
  *
- *              A two dimensional array d(0:iub,0:jub) that contains the
+ *              A two dimensional array d(y,x) that contains the
  *              description of the data array to be contoured. Each element of
- *              the array is a sample of the surface being studied at a point (x,y)
+ *              the array is a sample of the surface being studied at a point (y,x)
  *
  * \param yOffset   index bounds of data matrix - start of y
  * \param ySize     index bounds of data matrix - number of y
