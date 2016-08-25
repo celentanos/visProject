@@ -73,14 +73,14 @@ MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  *              description of the data array to be contoured. Each element of
  *              the array is a sample of the surface being studied at a point (x,y)
  *
- * \param ilb   index bounds of data matrix - start of y
- * \param iub   index bounds of data matrix - number of y
- * \param jlb   index bounds of data matrix - start of x
- * \param jub   index bounds of data matrix - number of x
- * \param x     data matrix column coordinates
- * \param y     data matrix row coordinates
- * \param nc    number of contour levels
- * \param z     contour levels in increasing order
+ * \param yOffset   index bounds of data matrix - start of y
+ * \param ySize     index bounds of data matrix - number of y
+ * \param xOffset   index bounds of data matrix - start of x
+ * \param xSize     index bounds of data matrix - number of x
+ * \param x         data matrix column coordinates
+ * \param y         data matrix row coordinates
+ * \param nc        number of contour levels
+ * \param z         contour levels in increasing order
  * \return
  */
 int conrec(double **d,
@@ -95,8 +95,8 @@ int conrec(double **d,
            std::vector<fantom::Point3> &v)
 {
     int m1, m2, m3, case_value;
-    double dmin, dmax, x1, x2, y1, y2;
-    register int i, j, k, m;
+    double dmin, dmax, y1 = 0.0, y2 = 0.0, x1 = 0.0, x2 = 0.0;
+    int i, j, k, m;
     double h[5];
     int sh[5];
     double xh[5], yh[5];
@@ -104,22 +104,17 @@ int conrec(double **d,
     // The indexing of im and jm should be noted as it has to start from zero
     // unlike the fortran counter part
     //===========================================================================
-    int im[4] = {0, 1, 1, 0}, jm[4] = {0, 0, 1, 1};
+    int im[4] = {0, 1, 1, 0};
+    int jm[4] = {0, 0, 1, 1};
     //===========================================================================
     // Note that castab is arranged differently from the FORTRAN code because
     // Fortran and C/C++ arrays are transposed of each other, in this case
     // it is more tricky as castab is in 3 dimension
     //===========================================================================
     int castab[3][3][3] = {
-        {
-            {0, 0, 8}, {0, 2, 5}, {7, 6, 9}
-        },
-        {
-            {0, 3, 4}, {1, 3, 1}, {4, 3, 0}
-        },
-        {
-            {9, 6, 7}, {5, 2, 0}, {8, 0, 0}
-        }
+        {{0, 0, 8}, {0, 2, 5}, {7, 6, 9}},
+        {{0, 3, 4}, {1, 3, 1}, {4, 3, 0}},
+        {{9, 6, 7}, {5, 2, 0}, {8, 0, 0}}
     };
     for (j = (xSize - 1); j >= xOffset; j--) {
         for (i = yOffset; i <= ySize - 1; i++) {
@@ -202,82 +197,82 @@ int conrec(double **d,
                                     //     Case 1 - Line between vertices 1 and 2
                                     //===========================================================
                                 case 1:
-                                    x1 = xh[m1];
-                                    y1 = yh[m1];
-                                    x2 = xh[m2];
-                                    y2 = yh[m2];
+                                    y1 = xh[m1];
+                                    x1 = yh[m1];
+                                    y2 = xh[m2];
+                                    x2 = yh[m2];
                                     break;
                                     //===========================================================
                                     //     Case 2 - Line between vertices 2 and 3
                                     //===========================================================
                                 case 2:
-                                    x1 = xh[m2];
-                                    y1 = yh[m2];
-                                    x2 = xh[m3];
-                                    y2 = yh[m3];
+                                    y1 = xh[m2];
+                                    x1 = yh[m2];
+                                    y2 = xh[m3];
+                                    x2 = yh[m3];
                                     break;
                                     //===========================================================
                                     //     Case 3 - Line between vertices 3 and 1
                                     //===========================================================
                                 case 3:
-                                    x1 = xh[m3];
-                                    y1 = yh[m3];
-                                    x2 = xh[m1];
-                                    y2 = yh[m1];
+                                    y1 = xh[m3];
+                                    x1 = yh[m3];
+                                    y2 = xh[m1];
+                                    x2 = yh[m1];
                                     break;
                                     //===========================================================
                                     //     Case 4 - Line between vertex 1 and side 2-3
                                     //===========================================================
                                 case 4:
-                                    x1 = xh[m1];
-                                    y1 = yh[m1];
-                                    x2 = xsect(m2, m3);
-                                    y2 = ysect(m2, m3);
+                                    y1 = xh[m1];
+                                    x1 = yh[m1];
+                                    y2 = xsect(m2, m3);
+                                    x2 = ysect(m2, m3);
                                     break;
                                     //===========================================================
                                     //     Case 5 - Line between vertex 2 and side 3-1
                                     //===========================================================
                                 case 5:
-                                    x1 = xh[m2];
-                                    y1 = yh[m2];
-                                    x2 = xsect(m3, m1);
-                                    y2 = ysect(m3, m1);
+                                    y1 = xh[m2];
+                                    x1 = yh[m2];
+                                    y2 = xsect(m3, m1);
+                                    x2 = ysect(m3, m1);
                                     break;
                                     //===========================================================
                                     //     Case 6 - Line between vertex 3 and side 1-2
                                     //===========================================================
                                 case 6:
-                                    x1 = xh[m3];
-                                    y1 = yh[m3];
-                                    x2 = xsect(m1, m2);
-                                    y2 = ysect(m1, m2);
+                                    y1 = xh[m3];
+                                    x1 = yh[m3];
+                                    y2 = xsect(m1, m2);
+                                    x2 = ysect(m1, m2);
                                     break;
                                     //===========================================================
                                     //     Case 7 - Line between sides 1-2 and 2-3
                                     //===========================================================
                                 case 7:
-                                    x1 = xsect(m1, m2);
-                                    y1 = ysect(m1, m2);
-                                    x2 = xsect(m2, m3);
-                                    y2 = ysect(m2, m3);
+                                    y1 = xsect(m1, m2);
+                                    x1 = ysect(m1, m2);
+                                    y2 = xsect(m2, m3);
+                                    x2 = ysect(m2, m3);
                                     break;
                                     //===========================================================
                                     //     Case 8 - Line between sides 2-3 and 3-1
                                     //===========================================================
                                 case 8:
-                                    x1 = xsect(m2, m3);
-                                    y1 = ysect(m2, m3);
-                                    x2 = xsect(m3, m1);
-                                    y2 = ysect(m3, m1);
+                                    y1 = xsect(m2, m3);
+                                    x1 = ysect(m2, m3);
+                                    y2 = xsect(m3, m1);
+                                    x2 = ysect(m3, m1);
                                     break;
                                     //===========================================================
                                     //     Case 9 - Line between sides 3-1 and 1-2
                                     //===========================================================
                                 case 9:
-                                    x1 = xsect(m3, m1);
-                                    y1 = ysect(m3, m1);
-                                    x2 = xsect(m1, m2);
-                                    y2 = ysect(m1, m2);
+                                    y1 = xsect(m3, m1);
+                                    x1 = ysect(m3, m1);
+                                    y2 = xsect(m1, m2);
+                                    x2 = ysect(m1, m2);
                                     break;
                                 default:
                                     printf("conrec(): default...");
@@ -286,9 +281,9 @@ int conrec(double **d,
                                 //=============================================================
                                 // Put your processing code here and comment out the printf
                                 //=============================================================
-                                printf("%f %f %f %f %f\n", x1, y1, x2, y2, z[k]);
-                                v.push_back(fantom::Point3(y1, x1, 0));
-                                v.push_back(fantom::Point3(y2, x2, 0));
+//                                printf("%f %f %f %f %f\n", x1, y1, x2, y2, z[k]);
+                                v.push_back(fantom::Point3(x1, y1, 0));
+                                v.push_back(fantom::Point3(x2, y2, 0));
                             }
                         }
                     }
