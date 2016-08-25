@@ -8,6 +8,7 @@
 #include <fantom/register.hpp>
 #include <fantom/graphics.hpp>
 
+#include <string>
 #include "lib/conrec_cxx.hpp"
 
 using namespace std;
@@ -22,6 +23,7 @@ public:
 //    public:
         Options(Options::Control &control) : VisAlgorithm::Options(control) {
             add<TensorFieldInterpolated<2, Scalar>>("Field", "interpolated TensorField");    /// interpolierte Werte an den Grid-Punkten
+            add<string>("Levels", "Number os Isoline-levels", "0");
         }
     };
 

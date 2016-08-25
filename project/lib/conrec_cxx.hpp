@@ -104,8 +104,8 @@ int conrec(double **d,
     // The indexing of im and jm should be noted as it has to start from zero
     // unlike the fortran counter part
     //===========================================================================
-    int im[4] = {0, 1, 1, 0};
-    int jm[4] = {0, 0, 1, 1};
+    int ym[4] = {0, 1, 1, 0};
+    int xm[4] = {0, 0, 1, 1};
     //===========================================================================
     // Note that castab is arranged differently from the FORTRAN code because
     // Fortran and C/C++ arrays are transposed of each other, in this case
@@ -136,9 +136,9 @@ int conrec(double **d,
                                 // The indexing of im and jm should be noted as it has to
                                 // start from zero
                                 //=============================================================
-                                h[m] = d[i + im[m - 1]][j + jm[m - 1]] - z[k];
-                                yh[m] = y[i + im[m - 1]];
-                                xh[m] = x[j + jm[m - 1]];
+                                h[m] = d[i + ym[m - 1]][j + xm[m - 1]] - z[k];
+                                yh[m] = y[i + ym[m - 1]];
+                                xh[m] = x[j + xm[m - 1]];
                             } else {
                                 h[0] = 0.25 * (h[1] + h[2] + h[3] + h[4]);
                                 yh[0] = 0.5 * (y[i] + y[i + 1]);
@@ -282,8 +282,8 @@ int conrec(double **d,
                                 // Put your processing code here and comment out the printf
                                 //=============================================================
 //                                printf("%f %f %f %f %f\n", x1, y1, x2, y2, z[k]);
-                                v.push_back(fantom::Point3(x1, y1, 0));
-                                v.push_back(fantom::Point3(x2, y2, 0));
+                                v.push_back(fantom::Point3(y1, x1, 0));
+                                v.push_back(fantom::Point3(y2, x2, 0));
                             }
                         }
                     }
