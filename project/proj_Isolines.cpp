@@ -57,17 +57,20 @@ public:
         double **d = new double*[ny];
         for (size_t i = 0; i < ny; ++i)
             d[i] = new double[nx];
-        for (size_t y = 0; y < ny; ++y)
+        for (int y = ny - 1; y >= 0; --y)
             for (size_t x = 0; x < nx; ++x)
                 d[y][x] = field->values()[y * nx + x][0];
+        debugLog() << "value1: " << field->values()[7120][0] << endl;
 
-        double *x = new double[nx];
+        double *jub = new double[nx];         //x - jub
         for (size_t i = 0; i < nx; ++i)
-            grid->points()[i][0];       //x - jub
+            grid->points()[i][0];
+        debugLog() << "x1: " << grid->points()[0][0] << endl;
 
-        double *y = new double[ny];
-        for (size_t i = 0; i < ny; ++i)
-            grid->points()[i][1];       //y - iub
+        double *iub = new double[ny];         //y - iub
+        for (int i = ny - 1; i >= 0; --i)
+            grid->points()[i * nx][1];
+        debugLog() << "y1: " << grid->points()[(ny - 1) * nx][1] << endl;
 
         double z[1] = {10};
 
@@ -76,15 +79,15 @@ public:
 //        v[0] = Point3(45, 6, 0);
 //        v[1] = Point3(55, 16, 0);
 
-        conrec(d, 0, ny - 1, 0, nx - 1, x, y, 1, z, v);
+        conrec(d, 0, ny - 1, 0, nx - 1, jub, iub, 1, z, v);
         debugLog() << "conrec: fertig" << endl;
 
         isolines->add(Primitive::LINES).setColor(Color(1, 0, 0)).setVertices(v);
         // Aufräumen -----------------------------------------------------------
         for (size_t i = 0; i < ny; ++i)
             delete d[i];
-        delete x;
-        delete y;
+        delete jub;
+        delete iub;
     }
 };
 

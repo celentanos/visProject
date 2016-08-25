@@ -74,9 +74,9 @@ MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  *              the array is a sample of the surface being studied at a point (x,y)
  *
  * \param ilb   index bounds of data matrix - start of y
- * \param iub   index bounds of data matrix - y
+ * \param iub   index bounds of data matrix - number of y
  * \param jlb   index bounds of data matrix - start of x
- * \param jub   index bounds of data matrix - x
+ * \param jub   index bounds of data matrix - number of x
  * \param x     data matrix column coordinates
  * \param y     data matrix row coordinates
  * \param nc    number of contour levels
