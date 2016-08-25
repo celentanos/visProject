@@ -57,29 +57,28 @@ public:
         double **d = new double*[ny];
         for (size_t i = 0; i < ny; ++i)
             d[i] = new double[nx];
-        for (int y = 0; y < ny; ++y)
+
+        for (size_t y = 0; y < ny; ++y)
             for (size_t x = 0; x < nx; ++x)
                 d[y][x] = field->values()[y * nx + x][0];
-        debugLog() << "value1: " << field->values()[7120][0] << endl;
 
         double *x = new double[nx];         //x - jub
         for (size_t i = 0; i < nx; ++i)
-            grid->points()[i][0];
-        debugLog() << "x1: " << grid->points()[0][0] << endl;
+            x[i] = grid->points()[i][0];
 
         double *y = new double[ny];         //y - iub
-        for (int i = 0; i < ny; ++i)
-            grid->points()[i * nx][1];
-        debugLog() << "y1: " << grid->points()[(ny - 1) * nx][1] << endl;
+        for (size_t i = 0; i < ny; ++i)
+            y[i] = grid->points()[i * nx][1];
 
-        double z[1] = {1};
+        const size_t levels = 14;
+        double z[levels] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
 
         /// Lines ##############################################################
         vector<Vector3> v;
 //        v[0] = Point3(45, 6, 0);
 //        v[1] = Point3(55, 16, 0);
 
-        conrec(d, 0, ny - 1, 0, nx - 1, y, x, 1, z, v);
+        conrec(d, 0, ny - 1, 0, nx - 1, y, x, levels, z, v);
         debugLog() << "conrec: fertig" << endl;
 
         isolines->add(Primitive::LINES).setColor(Color(1, 0, 0)).setVertices(v);

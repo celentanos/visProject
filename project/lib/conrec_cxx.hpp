@@ -84,12 +84,12 @@ MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  * \return
  */
 int conrec(double **d,
-           int ilb,
-           int iub,
-           int jlb,
-           int jub,
-           double *x,
+           int yOffset,
+           int ySize,
+           int xOffset,
+           int xSize,
            double *y,
+           double *x,
            int nc,
            double *z,
            std::vector<fantom::Point3> &v)
@@ -121,8 +121,8 @@ int conrec(double **d,
             {9, 6, 7}, {5, 2, 0}, {8, 0, 0}
         }
     };
-    for (j = (jub - 1); j >= jlb; j--) {
-        for (i = ilb; i <= iub - 1; i++) {
+    for (j = (xSize - 1); j >= xOffset; j--) {
+        for (i = yOffset; i <= ySize - 1; i++) {
 
             double temp1, temp2;
             temp1 = min(d[i][j], d[i][j + 1]);
@@ -142,12 +142,12 @@ int conrec(double **d,
                                 // start from zero
                                 //=============================================================
                                 h[m] = d[i + im[m - 1]][j + jm[m - 1]] - z[k];
-                                xh[m] = x[i + im[m - 1]];
-                                yh[m] = y[j + jm[m - 1]];
+                                xh[m] = y[i + im[m - 1]];
+                                yh[m] = x[j + jm[m - 1]];
                             } else {
                                 h[0] = 0.25 * (h[1] + h[2] + h[3] + h[4]);
-                                xh[0] = 0.5 * (x[i] + x[i + 1]);
-                                yh[0] = 0.5 * (y[j] + y[j + 1]);
+                                xh[0] = 0.5 * (y[i] + y[i + 1]);
+                                yh[0] = 0.5 * (x[j] + x[j + 1]);
                             }
                             if (h[m] > 0.0) {
                                 sh[m] = 1;
@@ -287,8 +287,8 @@ int conrec(double **d,
                                 // Put your processing code here and comment out the printf
                                 //=============================================================
                                 printf("%f %f %f %f %f\n", x1, y1, x2, y2, z[k]);
-                                v.push_back(fantom::Point3(x1, y1, 0));
-                                v.push_back(fantom::Point3(x2, y2, 0));
+                                v.push_back(fantom::Point3(y1, x1, 0));
+                                v.push_back(fantom::Point3(y2, x2, 0));
                             }
                         }
                     }
