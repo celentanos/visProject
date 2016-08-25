@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
+#include <algorithm>    // std::sort
 
 #define LINE_OFFSET     10
 #define MISSING_VAL     -9999
@@ -35,6 +36,7 @@ public:
         DataOutputs( Control &control ) : DataAlgorithm::DataOutputs( control ) {
             add< DomainBase >( "Points" );
             add< TensorFieldBase >( "Field" );
+//            add < TensorFieldInterpolated < 2, Scalar >> ("Values");
             // hier muessen weitere Ausgaben des Moduls ergaenzt werden, wenn welche vorhanden sind
         }
     };
@@ -61,6 +63,8 @@ public:
             // Speicher fuer die Daten
             std::vector< Point2 > points;
             std::vector< Scalar > values;
+//            std::vector<double> positions[2];
+//            std::vector<double> timeSteps;
 
             // Schleife zum einlesen der Daten
             while( infile && !abortFlag ) {
@@ -88,13 +92,27 @@ public:
                     continue;
                 points.push_back(Point2(x, y));
                 values.push_back(Scalar(val));
+//                positions[0].push_back(x);
+//                positions[1].push_back(y);
             }
+//            std::sort(positions[0].begin(), positions[0].end());
+//            std::sort(positions[1].begin(), positions[1].end());
+//            timeSteps.push_back(0.0);
+
+//            for (int i = 0; i < 100; ++i)
+//                infoLog() << positions[0][i] << endl;
 
             auto domain = DomainFactory::makeDomainArbitrary( points );
             auto field  = DomainFactory::makeTensorField( *domain, values );
 
-            setResult( "Points", domain );
-            setResult( "Field", field );
+//            auto domain2 = DomainFactory::makeDomainArbitrary(points);
+//            auto grid2 = DomainFactory::makeGridStructured(*domain2);
+//            auto field2 = DomainFactory::makeTensorField(*grid2, values, Precision::FLOAT64,
+//                          DomainType::points, timeSteps);
+
+            setResult("Points", domain);
+            setResult("Field", field);
+//            setResult("Values", field2);
         }
     }
 
