@@ -84,6 +84,8 @@ int conrec(double **d,
            double *z,
            std::vector<fantom::Point3> &v)
 {
+    ySize -= 1; // last index = size - 1
+    xSize -= 1; // last index = size - 1
     int m1, m2, m3, case_value;
     double dmin, dmax, x1 = 0.0, x2 = 0.0, y1 = 0.0, y2 = 0.0;
     int i, j, k, m;

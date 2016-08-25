@@ -56,6 +56,7 @@ public:
         debugLog() << "nx: " << nx << endl;
         debugLog() << "ny: " << ny << endl;
 
+        /// Datenstrukturen für conrec #########################################
         double **d = new double*[ny];
         for (size_t i = 0; i < ny; ++i)
             d[i] = new double[nx];
@@ -79,7 +80,7 @@ public:
         /// Lines ##############################################################
         vector<Vector3> v;
 
-        conrec(d, 0, static_cast<int>(ny - 1), 0, static_cast<int>(nx - 1), y, x, levels, z, v);
+        conrec(d, 0, static_cast<int>(ny), 0, static_cast<int>(nx), y, x, levels, z, v);
         debugLog() << "conrec: fertig" << endl;
 
         isolines->add(Primitive::LINES).setColor(Color(1, 0, 0)).setVertices(v);
