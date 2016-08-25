@@ -99,7 +99,7 @@ int conrec(double **d,
     int i, j, k, m;
     double h[5];
     int sh[5];
-    double xh[5], yh[5];
+    double yh[5], xh[5];
     //===========================================================================
     // The indexing of im and jm should be noted as it has to start from zero
     // unlike the fortran counter part
@@ -137,12 +137,12 @@ int conrec(double **d,
                                 // start from zero
                                 //=============================================================
                                 h[m] = d[i + im[m - 1]][j + jm[m - 1]] - z[k];
-                                xh[m] = y[i + im[m - 1]];
-                                yh[m] = x[j + jm[m - 1]];
+                                yh[m] = y[i + im[m - 1]];
+                                xh[m] = x[j + jm[m - 1]];
                             } else {
                                 h[0] = 0.25 * (h[1] + h[2] + h[3] + h[4]);
-                                xh[0] = 0.5 * (y[i] + y[i + 1]);
-                                yh[0] = 0.5 * (x[j] + x[j + 1]);
+                                yh[0] = 0.5 * (y[i] + y[i + 1]);
+                                xh[0] = 0.5 * (x[j] + x[j + 1]);
                             }
                             if (h[m] > 0.0) {
                                 sh[m] = 1;
@@ -197,35 +197,35 @@ int conrec(double **d,
                                     //     Case 1 - Line between vertices 1 and 2
                                     //===========================================================
                                 case 1:
-                                    y1 = xh[m1];
-                                    x1 = yh[m1];
-                                    y2 = xh[m2];
-                                    x2 = yh[m2];
+                                    y1 = yh[m1];
+                                    x1 = xh[m1];
+                                    y2 = yh[m2];
+                                    x2 = xh[m2];
                                     break;
                                     //===========================================================
                                     //     Case 2 - Line between vertices 2 and 3
                                     //===========================================================
                                 case 2:
-                                    y1 = xh[m2];
-                                    x1 = yh[m2];
-                                    y2 = xh[m3];
-                                    x2 = yh[m3];
+                                    y1 = yh[m2];
+                                    x1 = xh[m2];
+                                    y2 = yh[m3];
+                                    x2 = xh[m3];
                                     break;
                                     //===========================================================
                                     //     Case 3 - Line between vertices 3 and 1
                                     //===========================================================
                                 case 3:
-                                    y1 = xh[m3];
-                                    x1 = yh[m3];
-                                    y2 = xh[m1];
-                                    x2 = yh[m1];
+                                    y1 = yh[m3];
+                                    x1 = xh[m3];
+                                    y2 = yh[m1];
+                                    x2 = xh[m1];
                                     break;
                                     //===========================================================
                                     //     Case 4 - Line between vertex 1 and side 2-3
                                     //===========================================================
                                 case 4:
-                                    y1 = xh[m1];
-                                    x1 = yh[m1];
+                                    y1 = yh[m1];
+                                    x1 = xh[m1];
                                     y2 = xsect(m2, m3);
                                     x2 = ysect(m2, m3);
                                     break;
@@ -233,8 +233,8 @@ int conrec(double **d,
                                     //     Case 5 - Line between vertex 2 and side 3-1
                                     //===========================================================
                                 case 5:
-                                    y1 = xh[m2];
-                                    x1 = yh[m2];
+                                    y1 = yh[m2];
+                                    x1 = xh[m2];
                                     y2 = xsect(m3, m1);
                                     x2 = ysect(m3, m1);
                                     break;
@@ -242,8 +242,8 @@ int conrec(double **d,
                                     //     Case 6 - Line between vertex 3 and side 1-2
                                     //===========================================================
                                 case 6:
-                                    y1 = xh[m3];
-                                    x1 = yh[m3];
+                                    y1 = yh[m3];
+                                    x1 = xh[m3];
                                     y2 = xsect(m1, m2);
                                     x2 = ysect(m1, m2);
                                     break;
