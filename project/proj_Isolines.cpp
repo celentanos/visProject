@@ -79,15 +79,20 @@ public:
         /// Lines ##############################################################
         vector<Vector3> v;
 
-        conrec(d, 0, ny - 1, 0, nx - 1, y, x, levels, z, v);
+        conrec(d, 0, static_cast<int>(ny - 1), 0, static_cast<int>(nx - 1), y, x, levels, z, v);
         debugLog() << "conrec: fertig" << endl;
 
         isolines->add(Primitive::LINES).setColor(Color(1, 0, 0)).setVertices(v);
         // Aufräumen -----------------------------------------------------------
-        for (size_t i = 0; i < ny; ++i)
+        for (size_t i = 0; i < ny; ++i) {
             delete[] d[i];
+            d[i] = 0;
+        }
+        d = 0;
         delete[] x;
+        x = 0;
         delete[] y;
+        y = 0;
     }
 };
 
