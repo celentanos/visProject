@@ -9,6 +9,7 @@
 #include <fantom/graphics.hpp>
 
 #include <string>
+#include <iterator>
 #include "lib/conrec_cxx.hpp"
 
 using namespace std;
@@ -24,6 +25,7 @@ public:
         Options(Options::Control &control) : VisAlgorithm::Options(control) {
             add<TensorFieldInterpolated<2, Scalar>>("Field", "interpolated TensorField");    /// interpolierte Werte an den Grid-Punkten
             add<string>("Levels", "Number os Isoline-levels", "0");
+            add<double>("Width", "Isoline-Width", 2);
         }
     };
 
@@ -44,6 +46,27 @@ public:
             return;
         }
 
+        /// Levels #############################################################
+        const string sLevels = options.get<string>("Levels");
+        istringstream iss(sLevels);
+        vector<string> vsLevels;
+        copy(istream_iterator<string>(iss), istream_iterator<string>(), back_inserter(vsLevels));
+        if(vsLevels.size() < 1) {
+            debugLog() << "No isoline-levels present!" << endl;
+            return;
+        }
+        vector<double> vdLevels;
+        for (size_t i = 0; i < vsLevels.size(); ++i)
+            vdLevels.push_back(stod(vsLevels[i]));
+        for (size_t i = 1; i < vdLevels.size(); ++i)
+            if(vdLevels[i] == 0.0) {
+                debugLog() << "Wrong value in isoline-levels present!" << endl;
+                return;
+            }
+
+        const double width = options.get<double>("Width");
+
+        /// Grid ###############################################################
         shared_ptr<const Grid<2> > grid = dynamic_pointer_cast<const Grid<2> >(field->domain());
         if( !grid ) {
             throw std::logic_error( "Wrong type of grid!" );
@@ -65,38 +88,46 @@ public:
             for (size_t x = 0; x < nx; ++x)
                 d[y][x] = field->values()[y * nx + x][0];
 
-        double *x = new double[nx];         //x - jub
+        vector<double> x;
         for (size_t i = 0; i < nx; ++i)
-            x[i] = grid->points()[i][0];
+            x.push_back(grid->points()[i][0]);
 
-        double *y = new double[ny];         //y - iub
+        vector<double> y;
         for (size_t i = 0; i < ny; ++i)
-            y[i] = grid->points()[i * nx][1];
+            y.push_back(grid->points()[i * nx][1]);
 
-        const size_t levels = 2;
-        double z[levels] = {5, 10};
+//        const size_t levels = 2;
+//        double z[levels] = {5, 10};
         debugLog() << "structs-init: fertig" << endl;
 
         /// Lines ##############################################################
-        vector<Vector3> v;
+        vector<vector<Vector3> *> v;
+        for (size_t i = 0; i < vdLevels.size(); ++i)
+            v.push_back(new vector<Vector3>);
 
-        conrec(d, 0, static_cast<int>(ny), 0, static_cast<int>(nx), y, x, levels, z, v);
+        conrec(d, 0, static_cast<int>(ny), 0, static_cast<int>(nx), y, x, static_cast<int>(vdLevels.size()), vdLevels, v);
         debugLog() << "conrec: fertig" << endl;
 
-        isolines->add(Primitive::LINES)
-        .setLineWidth(2)
-        .setColor(Color(1, 0, 0))
-        .setVertices(v);
+        /// Isolines ###########################################################
+        for (size_t i = 0; i < vdLevels.size(); ++i) {
+            float r = i / (static_cast<float>(vdLevels.size()) - 1);
+            float b = (static_cast<float>(vdLevels.size()) - 1 - i) / (static_cast<float>(vdLevels.size()) - 1);
+
+            Color color(r, 0.25, b);
+
+            isolines->add(Primitive::LINES)
+            .setLineWidth(width)
+            .setColor(color)
+            .setVertices(*v[i]);
+        }
         // Aufräumen -----------------------------------------------------------
         for (size_t i = 0; i < ny; ++i) {
             delete[] d[i];
             d[i] = 0;
         }
         d = 0;
-        delete[] x;
-        x = 0;
-        delete[] y;
-        y = 0;
+        for (size_t i = 0; i < v.size(); ++i)
+            delete v[i];
     }
 };
 

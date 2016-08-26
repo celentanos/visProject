@@ -78,11 +78,11 @@ int conrec(double **d,
            int ySize,
            int xOffset,
            int xSize,
-           double *y,
-           double *x,
+           std::vector<double> &y,
+           std::vector<double> &x,
            int nc,
-           double *z,
-           std::vector<fantom::Point3> &v)
+           std::vector<double> &z,
+           std::vector<std::vector<fantom::Vector3> *> &v)
 {
     ySize -= 1; // last index = size - 1
     xSize -= 1; // last index = size - 1
@@ -274,12 +274,12 @@ int conrec(double **d,
                                 // Put your processing code here and comment out the printf
                                 //=============================================================
 //                                printf("%f %f %f %f %f\n", x1, y1, x2, y2, z[k]);
-                                v.push_back(fantom::Point3(x1, y1, 0));
-                                v.push_back(fantom::Point3(x2, y2, 0));
+                                v.at(k)->push_back(fantom::Point3(x1, y1, 0));
+                                v.at(k)->push_back(fantom::Point3(x2, y2, 0));
                             }
                         }
                     }
-                }
+                }// nc
             }
         }
     }
