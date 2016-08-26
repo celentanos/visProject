@@ -69,10 +69,10 @@ public:
         .setLineWidth( 5.0 )
         .setColor( Color( 0.6, 0.6, 0.6, 1.0 ) )
         .setVertices( tri );
+        /// Blinn-Phong ########################################################
         // example fragment shader interface
         tri[1] *= -1.0;
         tri[2] *= -1.0;
-        /// Blinn-Phong ########################################################
         std::vector< Color > col( 3, Color( 0.0, 0.0, 0.0, 1.0 ) );
         col[0] = Color( 1.0, 0.0, 0.0, 0.5 );
         col[1] = Color( 0.0, 1.0, 0.0, 0.5 );

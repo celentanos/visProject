@@ -83,7 +83,10 @@ public:
         conrec(d, 0, static_cast<int>(ny), 0, static_cast<int>(nx), y, x, levels, z, v);
         debugLog() << "conrec: fertig" << endl;
 
-        isolines->add(Primitive::LINES).setColor(Color(1, 0, 0)).setVertices(v);
+        isolines->add(Primitive::LINES)
+        .setLineWidth(2)
+        .setColor(Color(1, 0, 0))
+        .setVertices(v);
         // Aufräumen -----------------------------------------------------------
         for (size_t i = 0; i < ny; ++i) {
             delete[] d[i];
