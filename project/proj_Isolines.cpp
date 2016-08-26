@@ -8,6 +8,7 @@
 #include <fantom/register.hpp>
 #include <fantom/graphics.hpp>
 
+#include <limits>
 #include <string>
 #include <iterator>
 #include "lib/conrec_cxx.hpp"
@@ -19,6 +20,8 @@ namespace
 class RainfallAlgorithm : public VisAlgorithm
 {
     unique_ptr< Primitive > isolines;
+    unique_ptr< Primitive > info;
+
 public:
     struct Options : public VisAlgorithm::Options {
 //    public:
@@ -32,6 +35,7 @@ public:
     struct VisOutputs : public VisAlgorithm::VisOutputs {
         VisOutputs(VisOutputs::Control &control) : VisAlgorithm::VisOutputs( control ) {
             addGraphics( "Isolines" );
+            addGraphics( "Info" );
         }
     };
 
@@ -39,6 +43,7 @@ public:
 
     virtual void execute(const Algorithm::Options &options, const volatile bool &abortFlag) override {
         isolines = getGraphics( "Isolines" ).makePrimitive();
+        info = getGraphics("Info").makePrimitive();
 
         shared_ptr< const TensorFieldInterpolated<2, Scalar> > field = options.get< TensorFieldInterpolated<2, Scalar> >("Field");
         if( !field ) {
@@ -120,6 +125,25 @@ public:
             .setColor(color)
             .setVertices(*v[i]);
         }
+        /// Info ###############################################################
+        double min = 1000.0;
+        double max = -1000.0;
+        for (size_t i = 0; i < nx * ny; ++i) {
+            double val = field->values()[i][0];
+            if(min > val)
+                min = val;
+            if(max < val)
+                max = val;
+        }
+        info->addTextLabel(Vector3(grid->points()[0][0] - 1, grid->points()[nx * ny - 1][1], 0),
+                           "Temp in C\nmin: " + to_string(min) + "\nmax: " + to_string(max),
+                           20,
+                           Color(1, 0.5, 0.5),
+                           Primitive::TopRight,
+                           Primitive::Serif,
+                           Primitive::Regular,
+                           false);
+
         // Aufräumen -----------------------------------------------------------
         for (size_t i = 0; i < ny; ++i) {
             delete[] d[i];

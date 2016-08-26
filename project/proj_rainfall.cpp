@@ -18,7 +18,9 @@ namespace
 {
 class RainfallAlgorithm : public VisAlgorithm
 {
-    unique_ptr< Primitive > isolines;
+    unique_ptr< Primitive > rain;
+    unique_ptr< Primitive > info;
+
 public:
     struct Options : public VisAlgorithm::Options {
 //    public:
@@ -33,13 +35,15 @@ public:
     struct VisOutputs : public VisAlgorithm::VisOutputs {
         VisOutputs(VisOutputs::Control &control) : VisAlgorithm::VisOutputs( control ) {
             addGraphics( "Rainfall" );
+            addGraphics( "Info" );
         }
     };
 
     RainfallAlgorithm(InitData &data) : VisAlgorithm(data) {}
 
     virtual void execute(const Algorithm::Options &options, const volatile bool &abortFlag) override {
-        isolines = getGraphics( "Rainfall" ).makePrimitive();
+        rain = getGraphics( "Rainfall" ).makePrimitive();
+        info = getGraphics("Info").makePrimitive();
 
         shared_ptr< const TensorFieldInterpolated<2, Scalar> > field = options.get< TensorFieldInterpolated<2, Scalar> >("Field");
         if( !field ) {
@@ -69,11 +73,30 @@ public:
         for (size_t i = 0; i < nx * ny; ++i) {
 //            v.push_back(Vector3(grid->points()[i][0], grid->points()[i][1], 0));
 //            v.push_back(Vector3(grid->points()[i][0], grid->points()[i][1], field->values()[i][0] / 50));
-            isolines->addCylinder(
+            rain->addCylinder(
                 Vector3(grid->points()[i][0], grid->points()[i][1], field->values()[i][0]*length / 2),
                 Vector3(0, 0, field->values()[i][0]*length),
                 width, color);
         }
+
+        /// Info ###############################################################
+        double min = 1000.0;
+        double max = -1000.0;
+        for (size_t i = 0; i < nx * ny; ++i) {
+            double val = field->values()[i][0];
+            if(min > val)
+                min = val;
+            if(max < val)
+                max = val;
+        }
+        info->addTextLabel(Vector3(grid->points()[0][0] - 1, grid->points()[nx * ny - 1][1] - 2, 0),
+                           "Rain in mm\nmin: " + to_string(min) + "\nmax: " + to_string(max),
+                           20,
+                           Color(0.5, 0.5, 1),
+                           Primitive::TopRight,
+                           Primitive::Serif,
+                           Primitive::Regular,
+                           false);
     }
 };
 

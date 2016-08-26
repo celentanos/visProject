@@ -20,7 +20,7 @@ class GraphicsTutorialAlgorithm : public VisAlgorithm
     std::unique_ptr< Primitive > mTriangle;
     std::unique_ptr< Primitive > mBlinnPhong;
     std::unique_ptr< Primitive > mGeometry;
-//    std::unique_ptr< Primitive > mTexture;
+    std::unique_ptr< Primitive > mTexture;
 //    std::unique_ptr< Primitive > mCustom;
 public:
     struct VisOutputs : public VisAlgorithm::VisOutputs {
@@ -32,7 +32,7 @@ public:
             addGraphics( "triangle" );
             addGraphics( "Blinn-Phong" );
             addGraphics( "geometry" );
-//            addGraphics( "texture" );
+            addGraphics( "texture" );
 //            addGraphics( "custom" );
         }
     };
@@ -48,7 +48,7 @@ public:
         mTriangle = getGraphics( "triangle" ).makePrimitive();
         mBlinnPhong = getGraphics( "Blinn-Phong" ).makePrimitive();
         mGeometry = getGraphics( "geometry" ).makePrimitive();
-//        mTexture = getGraphics( "texture" ).makePrimitive();
+        mTexture = getGraphics( "texture" ).makePrimitive();
 //        mCustom = getGraphics( "custom" ).makePrimitive();
         // example high-level primitive interface
 //        mX->addArrow( Point3( 0.75, 0.0, 0.0 ), Vector3( 0.25, 0.0, 0.0 ), 0.02, Color( 1.0, 0.0, 0.0, 1.0 ) );
@@ -94,63 +94,63 @@ public:
 //                               Primitive::OUT_LINE_STRIP,
 //                               4 );
         mGeometry->add( Primitive::LINES ).setVertices( v );
-        // example texture mapped primitive drawing
-//        std::unique_ptr< Texture > texture2D = makeTexture( resourcePath() + "images/FAnToM-logo.jpg" );
-//        std::unique_ptr< Texture > texture3D = makeTexture( false, 256, 64, 32 );
-//        for( size_t k = 0; k != texture3D->depth(); ++k ) {
-//            for( size_t j = 0; j != texture3D->height(); ++j ) {
-//                for( size_t i = 0; i != texture3D->width(); ++i ) {
-//                    size_t column = ( i * texture2D->width() ) / texture3D->width();
-//                    size_t row = ( j * texture2D->height() ) / texture3D->height();
-//                    texture3D->set( texture2D->get( column, row ), i, j, k );
-//                }
-//            }
-//        }
-//        std::vector< Point3 > cube( 8 );
-//        cube[0] = Point3( -0.5, -0.5, 0.5 );
-//        cube[1] = Point3( 0.5, -0.5, 0.5 );
-//        cube[2] = Point3( 0.5, 0.5, 0.5 );
-//        cube[3] = Point3( -0.5, 0.5, 0.5 );
-//        cube[4] = Point3( -0.5, -0.5, -0.5 );
-//        cube[5] = Point3( 0.5, -0.5, -0.5 );
-//        cube[6] = Point3( 0.5, 0.5, -0.5 );
-//        cube[7] = Point3( -0.5, 0.5, -0.5 );
-//        std::vector< Point3 > texCoords( 8 );
-//        texCoords[0] = Point3( 0.0, 0.0, 1.0 );
-//        texCoords[1] = Point3( 1.0, 0.0, 1.0 );
-//        texCoords[2] = Point3( 1.0, 1.0, 1.0 );
-//        texCoords[3] = Point3( 0.0, 1.0, 1.0 );
-//        texCoords[4] = Point3( 0.0, 0.0, 0.0 );
-//        texCoords[5] = Point3( 1.0, 0.0, 0.0 );
-//        texCoords[6] = Point3( 1.0, 1.0, 0.0 );
-//        texCoords[7] = Point3( 0.0, 1.0, 0.0 );
-//        std::vector< unsigned int > sides( 6 * 4 );
-//        sides[0] = 0;
-//        sides[1] = 1;
-//        sides[2] = 2;
-//        sides[3] = 3;
-//        sides[4] = 1;
-//        sides[5] = 5;
-//        sides[6] = 6;
-//        sides[7] = 2;
-//        sides[8] = 4;
-//        sides[9] = 0;
-//        sides[10] = 3;
-//        sides[11] = 7;
-//        sides[12] = 4;
-//        sides[13] = 5;
-//        sides[14] = 1;
-//        sides[15] = 0;
-//        sides[16] = 3;
-//        sides[17] = 2;
-//        sides[18] = 6;
-//        sides[19] = 7;
-//        sides[20] = 5;
-//        sides[21] = 4;
-//        sides[22] = 7;
-//        sides[23] = 6;
-//        mTexture->setTexture( 0, *texture3D );
-//        mTexture->add( Primitive::QUADS ).setTexCoords( 0, texCoords ).setVertices( cube, sides );
+        /// example texture mapped primitive drawing ###########################
+        std::unique_ptr< Texture > texture2D = makeTexture( resourcePath() + "images/FAnToM-logo.jpg" );
+        std::unique_ptr< Texture > texture3D = makeTexture( false, 256, 64, 32 );
+        for( size_t k = 0; k != texture3D->depth(); ++k ) {
+            for( size_t j = 0; j != texture3D->height(); ++j ) {
+                for( size_t i = 0; i != texture3D->width(); ++i ) {
+                    size_t column = ( i * texture2D->width() ) / texture3D->width();
+                    size_t row = ( j * texture2D->height() ) / texture3D->height();
+                    texture3D->set( texture2D->get( column, row ), i, j, k );
+                }
+            }
+        }
+        std::vector< Point3 > cube( 8 );
+        cube[0] = Point3( -0.5, -0.5, 0.5 );
+        cube[1] = Point3( 0.5, -0.5, 0.5 );
+        cube[2] = Point3( 0.5, 0.5, 0.5 );
+        cube[3] = Point3( -0.5, 0.5, 0.5 );
+        cube[4] = Point3( -0.5, -0.5, -0.5 );
+        cube[5] = Point3( 0.5, -0.5, -0.5 );
+        cube[6] = Point3( 0.5, 0.5, -0.5 );
+        cube[7] = Point3( -0.5, 0.5, -0.5 );
+        std::vector< Point3 > texCoords( 8 );
+        texCoords[0] = Point3( 0.0, 0.0, 1.0 );
+        texCoords[1] = Point3( 1.0, 0.0, 1.0 );
+        texCoords[2] = Point3( 1.0, 1.0, 1.0 );
+        texCoords[3] = Point3( 0.0, 1.0, 1.0 );
+        texCoords[4] = Point3( 0.0, 0.0, 0.0 );
+        texCoords[5] = Point3( 1.0, 0.0, 0.0 );
+        texCoords[6] = Point3( 1.0, 1.0, 0.0 );
+        texCoords[7] = Point3( 0.0, 1.0, 0.0 );
+        std::vector< unsigned int > sides( 6 * 4 );
+        sides[0] = 0;
+        sides[1] = 1;
+        sides[2] = 2;
+        sides[3] = 3;
+        sides[4] = 1;
+        sides[5] = 5;
+        sides[6] = 6;
+        sides[7] = 2;
+        sides[8] = 4;
+        sides[9] = 0;
+        sides[10] = 3;
+        sides[11] = 7;
+        sides[12] = 4;
+        sides[13] = 5;
+        sides[14] = 1;
+        sides[15] = 0;
+        sides[16] = 3;
+        sides[17] = 2;
+        sides[18] = 6;
+        sides[19] = 7;
+        sides[20] = 5;
+        sides[21] = 4;
+        sides[22] = 7;
+        sides[23] = 6;
+        mTexture->setTexture( 0, *texture3D );
+        mTexture->add( Primitive::QUADS ).setTexCoords( 0, texCoords ).setVertices( cube, sides );
 //        mCustom->addCustom( makeTriangleDrawer );
     }
 //    struct GlTriangleDrawer : public CustomDrawer {
