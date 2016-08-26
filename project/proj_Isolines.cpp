@@ -16,7 +16,7 @@ using namespace std;
 using namespace fantom;
 namespace
 {
-class IsolinesAlgorithm : public VisAlgorithm
+class RainfallAlgorithm : public VisAlgorithm
 {
     unique_ptr< Primitive > isolines;
 public:
@@ -35,7 +35,7 @@ public:
         }
     };
 
-    IsolinesAlgorithm(InitData &data) : VisAlgorithm(data) {}
+    RainfallAlgorithm(InitData &data) : VisAlgorithm(data) {}
 
     virtual void execute(const Algorithm::Options &options, const volatile bool &abortFlag) override {
         isolines = getGraphics( "Isolines" ).makePrimitive();
@@ -125,12 +125,15 @@ public:
             delete[] d[i];
             d[i] = 0;
         }
+        delete[] d;
         d = 0;
-        for (size_t i = 0; i < v.size(); ++i)
+        for (size_t i = 0; i < v.size(); ++i) {
             delete v[i];
+            v[i] = 0;
+        }
     }
 };
 
-AlgorithmRegister<IsolinesAlgorithm> dummy("Vis Project/Isolines", "Interpolate in a data set.");
+AlgorithmRegister<RainfallAlgorithm> dummy("Vis Project/Isolines", "Interpolate in a data set.");
 
 } // namespace

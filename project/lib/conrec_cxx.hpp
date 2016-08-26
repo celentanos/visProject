@@ -73,16 +73,16 @@ MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  * \param z         contour levels in increasing order
  * \return
  */
-int conrec(double **d,
-           int yOffset,
-           int ySize,
-           int xOffset,
-           int xSize,
-           std::vector<double> &y,
-           std::vector<double> &x,
-           int nc,
-           std::vector<double> &z,
-           std::vector<std::vector<fantom::Vector3> *> &v)
+static int conrec(double **d,
+                  int yOffset,
+                  int ySize,
+                  int xOffset,
+                  int xSize,
+                  std::vector<double> &y,
+                  std::vector<double> &x,
+                  int nc,
+                  std::vector<double> &z,
+                  std::vector<std::vector<fantom::Vector3>*> &v)
 {
     ySize -= 1; // last index = size - 1
     xSize -= 1; // last index = size - 1
