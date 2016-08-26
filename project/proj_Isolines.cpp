@@ -17,7 +17,7 @@ using namespace std;
 using namespace fantom;
 namespace
 {
-class RainfallAlgorithm : public VisAlgorithm
+class TextureAlgorithm : public VisAlgorithm
 {
     unique_ptr< Primitive > isolines;
     unique_ptr< Primitive > info;
@@ -39,7 +39,7 @@ public:
         }
     };
 
-    RainfallAlgorithm(InitData &data) : VisAlgorithm(data) {}
+    TextureAlgorithm(InitData &data) : VisAlgorithm(data) {}
 
     virtual void execute(const Algorithm::Options &options, const volatile bool &abortFlag) override {
         isolines = getGraphics( "Isolines" ).makePrimitive();
@@ -101,8 +101,6 @@ public:
         for (size_t i = 0; i < ny; ++i)
             y.push_back(grid->points()[i * nx][1]);
 
-//        const size_t levels = 2;
-//        double z[levels] = {5, 10};
         debugLog() << "structs-init: fertig" << endl;
 
         /// Lines ##############################################################
@@ -136,7 +134,7 @@ public:
                 max = val;
         }
         info->addTextLabel(Vector3(grid->points()[0][0] - 1, grid->points()[nx * ny - 1][1], 0),
-                           "Temp in C\nmin: " + to_string(min) + "\nmax: " + to_string(max),
+                           "Temp in oC\nmin: " + to_string(min) + "\nmax: " + to_string(max),
                            20,
                            Color(1, 0.5, 0.5),
                            Primitive::TopRight,
@@ -158,6 +156,6 @@ public:
     }
 };
 
-AlgorithmRegister<RainfallAlgorithm> dummy("Vis Project/Isolines", "Interpolate in a data set.");
+AlgorithmRegister<TextureAlgorithm> dummy("Vis Project/Isolines", "Interpolate in a data set.");
 
 } // namespace

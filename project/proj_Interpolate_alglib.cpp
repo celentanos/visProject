@@ -24,16 +24,15 @@ public:
             add<DiscreteDomain<2>>("Points", "A point set or grid");
             add<TensorFieldDiscrete<Scalar>>("Field", "A scattered scalar field");
             add<Grid<2>>("Grid2D", "Grid where to interpolate");
+            add<double>("r", "Radius of interpolation", 4);
         }
     };
 
     struct DataOutputs : public DataAlgorithm::DataOutputs {
     public:
         DataOutputs(Control &control) : DataAlgorithm::DataOutputs(control) {
-//            add<TensorFieldBase>("Interpolated");
-//            add<DiscreteDomain<2>>("Interpolated Domain");
             add<TensorFieldInterpolated<2, Scalar>>("interpolated Domain");     /// interpolierte Werte an den Grid-Punkten
-            add<Grid<2>>("Grid 2D");
+//            add<Grid<2>>("Grid 2D");
         }
     };
 
@@ -50,6 +49,8 @@ public:
             return;
         }
 
+        double r = parameters.get<double>("r");
+
         alglib::idwinterpolant idw;
         alglib::real_2d_array pos;
         pos.setlength(points->numPoints(), 3);
@@ -61,7 +62,7 @@ public:
         }
 
 //        alglib::idwbuildmodifiedshepard(pos, pos.rows(), 2, 1, 15, 25, idw);
-        alglib::idwbuildmodifiedshepardr(pos, pos.rows(), 2, 4, idw);
+        alglib::idwbuildmodifiedshepardr(pos, pos.rows(), 2, r, idw);
 
         alglib::real_1d_array xy;
         xy.setlength(2);
@@ -75,23 +76,8 @@ public:
         auto tensorFieldInterpolated = DomainFactory::makeTensorField(*grid, values, Precision::FLOAT64, DomainType::points);
 
         // test ----------------------------------------------------------------
-
-        std::shared_ptr< const Grid< 2 > > grid2 = std::dynamic_pointer_cast< const Grid< 2 > >( tensorFieldInterpolated->domain() );
-        setResult("Grid 2D", grid2);
-
-        const ValueArray< Point2 > &points2d = grid->points();
-        Cell cell = grid->cell(0);
-//        Point2 point2d;
-        for (size_t i = 0; i < cell.numVertices(); ++i) {
-            debugLog() << points2d[cell.index(i)] << std::endl;
-        }
-//        Grid<2> g = interpolatedValueDomain->domain();
-        const std::shared_ptr<const TensorFieldInterpolated<2, Scalar>> bla = DomainFactory::makeTensorField(*grid, values, Precision::FLOAT64, DomainType::points);
-        debugLog() << bla->makeDiscreteEvaluator()->value(0) << std::endl;
-
-//        for (int i = 0; i < 100; ++i) {
-//            debugLog() << i << "\t" << interpolatedValueDomain->values(i) << std::endl;
-//        }
+//        std::shared_ptr< const Grid< 2 > > grid2 = std::dynamic_pointer_cast< const Grid< 2 > >( tensorFieldInterpolated->domain() );
+//        setResult("Grid 2D", grid2);
         // ---------------------------------------------------------------------
 
         // Strukturen nach Außen freigeben -------------------------------------

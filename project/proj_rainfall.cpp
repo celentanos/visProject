@@ -16,7 +16,7 @@ using namespace std;
 using namespace fantom;
 namespace
 {
-class RainfallAlgorithm : public VisAlgorithm
+class TextureAlgorithm : public VisAlgorithm
 {
     unique_ptr< Primitive > rain;
     unique_ptr< Primitive > info;
@@ -26,9 +26,9 @@ public:
 //    public:
         Options(Options::Control &control) : VisAlgorithm::Options(control) {
             add<TensorFieldInterpolated<2, Scalar>>("Field", "interpolated TensorField");    /// interpolierte Werte an den Grid-Punkten
-            add<string>("Levels", "Number os Isoline-levels", "0");
-            add<double>("Width", "Isoline-Width", 0.1);
-            add<double>("Length", "Isoline-Lenth multiplicator", 0.2);
+            add<double>("wigth", "cylinder wigth", 0.1);
+            add<double>("high", "cylinder-high multiplicator", 0.2);
+            add<double>("threshold", "draw threshold", 0.1);
         }
     };
 
@@ -39,7 +39,7 @@ public:
         }
     };
 
-    RainfallAlgorithm(InitData &data) : VisAlgorithm(data) {}
+    TextureAlgorithm(InitData &data) : VisAlgorithm(data) {}
 
     virtual void execute(const Algorithm::Options &options, const volatile bool &abortFlag) override {
         rain = getGraphics( "Rainfall" ).makePrimitive();
@@ -51,8 +51,9 @@ public:
             return;
         }
 
-        const double width = options.get<double>("Width");
-        const double length = options.get<double>("Length");
+        const double width = options.get<double>("wigth");
+        const double high = options.get<double>("high");
+        const double threshold = options.get<double>("threshold");
 
         /// Grid ###############################################################
         shared_ptr<const Grid<2> > grid = dynamic_pointer_cast<const Grid<2> >(field->domain());
@@ -68,17 +69,14 @@ public:
         debugLog() << "ny: " << ny << endl;
 
         /// Lines ##############################################################
-        vector<Vector3> v;
         Color color(0.4, 0.4, 1);
         for (size_t i = 0; i < nx * ny; ++i) {
-//            v.push_back(Vector3(grid->points()[i][0], grid->points()[i][1], 0));
-//            v.push_back(Vector3(grid->points()[i][0], grid->points()[i][1], field->values()[i][0] / 50));
-            rain->addCylinder(
-                Vector3(grid->points()[i][0], grid->points()[i][1], field->values()[i][0]*length / 2),
-                Vector3(0, 0, field->values()[i][0]*length),
-                width, color);
+            if(field->values()[i][0] > threshold)
+                rain->addCylinder(
+                    Vector3(grid->points()[i][0], grid->points()[i][1], field->values()[i][0]*high / 2),
+                    Vector3(0, 0, field->values()[i][0]*high),
+                    width, color);
         }
-
         /// Info ###############################################################
         double min = 1000.0;
         double max = -1000.0;
@@ -100,6 +98,6 @@ public:
     }
 };
 
-AlgorithmRegister<RainfallAlgorithm> dummy("Vis Project/Rainfall", "Interpolate in a data set.");
+AlgorithmRegister<TextureAlgorithm> dummy("Vis Project/Rainfall", "Interpolate in a data set.");
 
 } // namespace
