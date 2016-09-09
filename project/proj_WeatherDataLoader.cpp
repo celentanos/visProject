@@ -39,8 +39,7 @@ public:
         }
     };
 
-    LoadGeoDataAlgorithm( InitData &data ) : DataAlgorithm( data ) {
-    }
+    LoadGeoDataAlgorithm( InitData &data ) : DataAlgorithm( data ) {}
 
     void execute( const Algorithm::Options &parameters, const volatile bool &abortFlag ) {
         // Test, ob die Dati gesetzt ist, sonst nichts machen

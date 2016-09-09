@@ -31,7 +31,7 @@ public:
     struct DataOutputs : public DataAlgorithm::DataOutputs {
     public:
         DataOutputs(Control &control) : DataAlgorithm::DataOutputs(control) {
-            add<TensorFieldInterpolated<2, Scalar>>("interpolated Domain");     /// interpolierte Werte an den Grid-Punkten
+            add<TensorFieldInterpolated<2, Scalar>>("interpolated TensorField");/// interpolierte Werte an den Grid-Punkten
 //            add<Grid<2>>("Grid 2D");
         }
     };
@@ -81,7 +81,7 @@ public:
         // ---------------------------------------------------------------------
 
         // Strukturen nach Außen freigeben -------------------------------------
-        setResult("interpolated Domain", tensorFieldInterpolated);
+        setResult("interpolated TensorField", tensorFieldInterpolated);
     }
 };
 

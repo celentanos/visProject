@@ -35,15 +35,13 @@ public:
         Options( Algorithm::Options::Control &control ) : DataAlgorithm::Options( control ) {
             // Die Datenpunkte
             add< All_DiscreteDomain >( "Domain", "" );
-
-            // Zusätzliche Optionen, wie Farbe und Goesse
-            add< double >( "Size", "", 0.05 );
-            add< Color >( "Color", "", Color(1, 0, 0) );
-
             // Optional ein Feld mit Werten
             add< TensorFieldDiscrete< Scalar > >( "Field", "" );
 
-            add<InputSlider>("slider", "", 5);
+            // Zusätzliche Optionen, wie Farbe und Goesse
+            add< double >( "Size", "", 0.01 );
+            add<InputSlider>("Size multiplicator", "", 5);
+            add< Color >( "Color", "", Color(1, 0, 0) );
         }
     };
 
@@ -58,7 +56,7 @@ public:
         mLabels = getGraphics( "field" ).makePrimitive();
 
         // Lesen der parameter -------------------------------------------------
-        auto slider = options.get< size_t >( "slider" );
+        auto slider = options.get< size_t >( "Size multiplicator" );
         auto size = options.get< double >( "Size" ) * slider;
         auto color = options.get< Color >( "Color" );
         auto domain = options.get< DiscreteDomain<2> >( "Domain" );
